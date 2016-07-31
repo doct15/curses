@@ -4,8 +4,8 @@
 from os import system
 import curses
 
-currentx = 2
-currenty = 2
+currentx = 3
+currenty = 3
 map_locx = 2
 map_locy = 2
 msg_locx = 10
@@ -18,6 +18,7 @@ go_right = ord("d")
 go_up = ord("w")
 go_down = ord("s")
 quit = ord("q")
+you = "*"
 #print ("left", go_left)
 
 #exit()
@@ -32,19 +33,20 @@ map = [
   ]
 
 map = [
-  "                ",
-  " +------------+ ",
-  " |            | ",
-  " | +--------+ | ",
-  " | |        | | ",
-  " | +---+ +--+ | ",
-  " |            | ",
-  " +------------+ "
+  "                  ",
+  "                  ",
+  "  +------------+  ",
+  "  |            |  ",
+  "  | +--------+ |  ",
+  "  | |        | |  ",
+  "  | +---+ +--+ |  ",
+  "  |            |  ",
+  "  +------------+  ",
+  "                  ",
+  "                  "
   ]
 
 myscreen = curses.initscr()
-
-
 #maxy, maxx = myscreen.getmaxyx()
 maxy = 24
 maxx = 80
@@ -80,7 +82,7 @@ def getinput():
           #myscreen.addstr('C:' + str(c) + ' |')
           #myscreen.refresh()
           # return curser to start position
-          myscreen.move(0, 0)
+          #reset_cursor()
           if (c == go_left):
             #myscreen.addstr(msg_locy,msg_locx,"Left")
             move_left()
@@ -112,20 +114,17 @@ def check_move(x,y):
     return 1
 
 
+
 def move_left():
-  global currentx, currenty
   check_move(currentx-1,currenty)
 
 def move_right():
-  global currentx, currenty
   check_move(currentx+1,currenty)
 
 def move_up():
-  global currentx, currenty
   check_move(currentx,currenty-1)
 
 def move_down():
-  global currentx, currenty
   check_move(currentx,currenty+1)
 
 
@@ -134,12 +133,16 @@ def print_dngn(x,y):
   global map_locx, map_locy, map_width, map
   myscreen.addstr(map_locy, map_locx, "")
   #for y in range (currenty-1, currenty+2):
-  for y in range (currenty-int(map_width/2), currenty+map_width):
+  for y in range (currenty-int(map_width/2), currenty+int(map_width/2)+1):
     #print ('Y:', y)
     #print (map_locx, map_locy)
     #print (currentx, currenty)
-    myscreen.addstr((map_locy+(y-currenty))+1,map_locx,map[y][currentx-int(map_width/2):currentx+map_width])
-      
+    myscreen.addstr((map_locy+(y-currenty))+1,map_locx,map[y][currentx-int(map_width/2):currentx+int(map_width/2)+1])
+  myscreen.addstr(map_locy+int(map_width/2)-1,map_locx+int(map_width/2),you)    
+  reset_cursor()
   return;
   
+def reset_cursor():
+  myscreen.addstr(0,0, "")
+
 main()  
