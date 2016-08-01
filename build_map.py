@@ -17,6 +17,8 @@ text = [
 "."
 ]
 
+#ascii = text
+#ascii[0] = ord(" ")
 ascii = [
 " ",
 "┌",
@@ -63,13 +65,13 @@ with open(file) as map_file:
         if ( char == text[conversion]):
           #print (conversion,char)
 
-          map_ascii[map_array] += ascii[conversion]
+          #map_ascii[map_array] += ascii[conversion]
+          myscreen.addstr(ascii[conversion])
 
           break
 
-    myscreen.addstr(map_ascii[map_array])
+    #myscreen.addstr(map_ascii[map_array])
     map_array+=1
-      
 
 #for line in map_ascii:
   #print (line)
@@ -78,7 +80,6 @@ write_file=file+".ascii"
 file_out=open(write_file,"w")
 file_out.writelines(map_ascii)
 file_out.close()
-
 
 print ("end")
 print (map_ascii)
