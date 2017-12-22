@@ -1,8 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/python3.5
 # -*- coding: latin-1 -*-
 
 from os import system
 import curses
+import sys
+sys.path
+
+stop
 
 myscreen = curses.initscr()
 
