@@ -31,8 +31,9 @@ map_placementy=gsize+1
 
 
 #The users current location in the dungeon
-currentx = 6
-currenty = 4
+currentx=6
+currenty=4
+direction=0
 
 #Colors
 light_grey = (64,64,64)
@@ -41,6 +42,9 @@ yellow = (255,255,0)
 white = (255,255,255)
 green = (0,255,0)
 blue = (0,0,255)
+grey = (127,127,127)
+red = (255,0,0)
+royalblue = (65,105,225)
 
 #Color assignments
 wall_fill = light_grey
@@ -55,6 +59,13 @@ go_left = pygame.K_a
 go_right = pygame.K_d
 go_up = pygame.K_w
 go_down = pygame.K_s
+quit = pygame.K_q
+
+#Key bindings
+turn_left = pygame.K_a
+turn_right = pygame.K_d
+go_forward = pygame.K_w
+go_backward = pygame.K_s
 quit = pygame.K_q
 
 #Debug/test dungeon map
@@ -135,23 +146,15 @@ font_size = 18
 
 def main():
   clock = pygame.time.Clock()
-  #print_grid()
-  # Draw screen border
-  # Draw map border
   create_character()
   clear_screen()
   draw_border(map_3d_x,map_3d_y,map_3d_width,map_3d_height,border_width)
   draw_border(map_placementx-1,map_placementy-1,gsize*(map_max_x)+2,gsize*(map_max_y)+2,border_width)
-  #pygame.draw.circle(screen,yellow,[map_3d_x,map_3d_y],3,0)
-  #for xpoint in range(len(xpoints)):
   for point in range(12):
-    #pygame.draw.circle(screen,yellow,[xpoints[point]+map_3d_x,ypoints_top[point]+map_3d_y],3,0)
-    #pygame.draw.circle(screen,yellow,[xpoints[point]+map_3d_x,map_3d_y+map_3d_height-ypoints_top[point]],3,0)
     pygame.draw.line(screen,yellow,[xpoints[point]+map_3d_x,ypoints_top[point]+map_3d_y],[xpoints[point]+map_3d_x,map_3d_y+map_3d_height-ypoints_top[point]],1)
-    if point < 11:
+    if (point < 11):
       pygame.draw.line(screen,yellow,[xpoints[point]+map_3d_x,ypoints_top[point]+map_3d_y],[xpoints[point+1]+map_3d_x,ypoints_top[point+1]+map_3d_y],1)
       pygame.draw.line(screen,yellow,[xpoints[point]+map_3d_x,ypoints_bottom[point]+map_3d_y],[xpoints[point+1]+map_3d_x,ypoints_bottom[point+1]+map_3d_y],1)
-      #print(xpoints[point]+map_3d_x,ypoints_bottom[point]+map_3d_y,xpoints[point+1]+map_3d_x,ypoints_bottom[point+1]+map_3d_y)
   print_dngn(currentx,currenty)
   write_status("The dungeon")
   getinput()
@@ -193,7 +196,22 @@ def print_dngn(pdcx,pdcy):
       if (dngn_char != " "):
         draw_wall(mapx,mapy)
       if (y == int(map_hmax_y)) and (x == int(map_hmax_x)):
-        pygame.draw.circle(screen,dude_color,[int(mapx+gsize/2),int(mapy+gsize/2)], int(gsize/3), int(gsize/5))
+        if (direction == 0):
+          pygame.draw.line(screen,royalblue,[int(mapx),int(mapy+gsize/2)-1],[int(mapx+gsize),int(mapy+gsize/2)-1],2)
+          pygame.draw.line(screen,royalblue,[int(mapx),int(mapy+gsize/2)-1],[int(mapx+gsize/3),int(mapy)],2)
+          pygame.draw.line(screen,royalblue,[int(mapx),int(mapy+gsize/2)-1],[int(mapx+gsize/3),int(mapy)+gsize],2)
+        elif (direction == 1):
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize/2),int(mapy)-1],[int(mapx+gsize/2),int(mapy+gsize)-1],2)
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize/2),int(mapy)-1],[int(mapx),int(mapy+gsize/3)],2)
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize/2),int(mapy)-1],[int(mapx+gsize),int(mapy+gsize/3)],2)
+        elif (direction == 2):
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize),int(mapy+gsize/2)-1],[int(mapx),int(mapy+gsize/2)-1],2)
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize),int(mapy+gsize/2)-1],[int(mapx+gsize-gsize/3),int(mapy)],2)
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize),int(mapy+gsize/2)-1],[int(mapx+gsize-gsize/3),int(mapy)+gsize],2)
+        elif (direction == 3):
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize/2),int(mapy+gsize)],[int(mapx+gsize/2),int(mapy)-1],2)
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize/2),int(mapy+gsize)],[int(mapx),int(mapy+gsize/3)],2)
+          pygame.draw.line(screen,royalblue,[int(mapx+gsize/2),int(mapy+gsize)],[int(mapx+gsize),int(mapy+gsize/3)],2)
   pygame.display.flip()
 
 def getinput():
@@ -202,18 +220,14 @@ def getinput():
       if event.type == pygame.KEYDOWN:
         if event.key == quit:
           quit()
-        elif (event.key == go_left) or (event.key == pygame.K_LEFT):
-          #myscreen.addstr(msg_locy,msg_locx,"Left")
-          move_left()
-        elif (event.key == go_up) or (event.key == pygame.K_UP):
-          #myscreen.addstr(msg_locy,msg_locx,"Up")
-          move_up()
-        elif (event.key == go_right) or (event.key == pygame.K_RIGHT):
-          #myscreen.addstr(msg_locy,msg_locx,"Right")
-          move_right()
-        elif (event.key == go_down) or (event.key == pygame.K_DOWN):
-          #myscreen.addstr(msg_locy,msg_locx,"Down")
-          move_down()
+        elif (event.key == turn_left) or (event.key == pygame.K_LEFT):
+          turn_left()
+        elif (event.key == go_forward) or (event.key == pygame.K_UP):
+          go_forward()
+        elif (event.key == turn_right) or (event.key == pygame.K_RIGHT):
+          turn_right()
+        elif (event.key == go_backward) or (event.key == pygame.K_DOWN):
+          go_backward()
         elif event.key == pygame.K_b:
           return "b"
           break
@@ -233,6 +247,45 @@ def check_move(x,y):
 
 def draw_border(x1,y1,x2,y2,w):
   pygame.draw.rect(screen,border_color,(x1-int(w/2),y1-int(w/2),x2,y2),w)
+
+def turn_left():
+  global direction
+  direction=direction-1
+  if direction < 0:
+    direction=3
+  clear_dngn()
+  clear_status()
+  print_dngn(currentx,currenty)
+
+
+def turn_right():
+  global direction
+  direction=direction+1
+  if direction > 3:
+    direction=0
+  clear_dngn()
+  clear_status()
+  print_dngn(currentx,currenty)
+
+def go_forward():
+  if (direction == 0):
+    move_left()
+  elif (direction == 1):
+    move_up()
+  elif (direction == 2):
+    move_right()
+  elif (direction == 3):
+    move_down()
+
+def go_backward():
+  if (direction == 0):
+    move_right()
+  elif (direction == 1):
+    move_down()
+  elif (direction == 2):
+    move_left()
+  elif (direction == 3):
+    move_up()
 
 def move_left():
   check_move(currentx-1,currenty)
