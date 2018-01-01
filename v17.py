@@ -16,25 +16,6 @@ gradius=int(gsize/2)
 screenmax_x=800
 screenmax_y=600
 
-#The in-game map number of squares shown (3 or 5?)
-map_max_x=5
-map_hmax_x=int(map_max_x/2)
-map_max_y=map_max_x
-map_hmax_y=int(map_max_y/2)
-
-#Map location on the screen x,y
-map_placementx=screenmax_x-gsize*(map_max_x+1)-1
-map_placementy=gsize+1
-#print (map_placementx)
-#print (map_placementy)
-#print (map_placementx-1,map_placementy-1,gsize*(map_max_x)+2,gsize*(map_max_y))
-
-
-#The users current location in the dungeon
-currentx=6
-currenty=4
-direction=0
-
 #Colors
 light_grey = (64,64,64)
 black = (0,0,0)
@@ -46,6 +27,27 @@ grey = (127,127,127)
 red = (255,0,0)
 royalblue = (65,105,225)
 
+#More Global stuff
+pygame.init()
+size = (screenmax_x,screenmax_y)
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("dngn")
+
+#The in-game map number of squares shown (3 or 5?)
+map_max_x=5
+map_hmax_x=int(map_max_x/2)
+map_max_y=map_max_x
+map_hmax_y=int(map_max_y/2)
+
+#Map location on the screen x,y
+map_placementx=screenmax_x-gsize*(map_max_x+1)-1
+map_placementy=gsize+1
+
+#The users current location in the dungeon
+currentx=6
+currenty=4
+direction=0
+
 #Color assignments
 wall_fill = light_grey
 wall_outline = yellow
@@ -53,13 +55,6 @@ background_color = black
 border_color = blue
 border_width = 2
 dude_color = green
-
-#Key bindings
-go_left = pygame.K_a
-go_right = pygame.K_d
-go_up = pygame.K_w
-go_down = pygame.K_s
-quit = pygame.K_q
 
 #Key bindings
 turn_left = pygame.K_a
@@ -87,12 +82,6 @@ map = [
 map_file = "map2.txt"
 map = [line for line in open(map_file, 'r')]
 
-#More Global stuff
-pygame.init()
-size = (screenmax_x,screenmax_y)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("dngn")
-
 #Map status line info
 map_statusx = screenmax_x-gsize*(map_max_x+1)-1
 map_statusy = gsize*(map_max_x+2)
@@ -104,28 +93,20 @@ map_3d_x=gsize
 map_3d_y=gsize*(map_max_y+1)+2
 map_3d_width=map_statusx-gsize-1
 map_3d_height=screenmax_y-gsize*7
-#print(map_3d_x,map_3d_y,map_3d_width,map_3d_height)
 
 #Define direction movements
 #0=Left
 #1=Up
 #2=Right
 #3=Down
-dirx=[i for i in range(4)]
-diry=[i for i in range(4)]
-dirx[0]=-1
-diry[0]=0
-dirx[1]=0
-diry[1]=-1
-dirx[2]=1
-diry[2]=0
-dirx[3]=0
-diry[3]=1
+dirx=[-1,0,1,0]
+diry=[0,-1,0,1]
+
+#Define 3d hallway size
 
 #Define 3d hallway points
 xpoints=[i for i in range(12)]
 xpoints[0]=1
-#xpoints[0]=int(map_3d_width/26.242)
 xpoints[5]=int(map_3d_width/2)-int(int(map_3d_width/26)/2)
 hallway_length=xpoints[5]-xpoints[0]
 xpoints[1]=xpoints[0]+int(hallway_length*.3)
@@ -140,7 +121,6 @@ xpoints[7]=map_3d_width-xpoints[4]
 xpoints[6]=map_3d_width-xpoints[5]
 ypoints_top=[i for i in range(12)]
 ypoints_top[0]=1
-#ypoints_top[0]=int(map_3d_height/18.4)
 ypoints_top[5]=int(map_3d_height/2)-int(int(map_3d_height/18.4)/2)
 hallway_height=ypoints_top[5]-ypoints_top[0]
 ypoints_top[1]=ypoints_top[0]+int(hallway_height*.3)
@@ -156,7 +136,6 @@ ypoints_top[6]=ypoints_top[5]
 ypoints_bottom=[i for i in range(12)]
 for i in range(12):
   ypoints_bottom[i]=map_3d_height-ypoints_top[i]
-  #print(i,i+6,11-i,ypoints_bottom[i+6],ypoints_top[11-i])
 #Text configuration
 font_size = 18
 
@@ -276,7 +255,6 @@ def turn_left():
   clear_status()
   print_dngn(currentx,currenty)
 
-
 def turn_right():
   global direction
   direction=direction+1
@@ -288,36 +266,8 @@ def turn_right():
 
 def go_forward():
   check_move(currentx+dirx[direction],currenty+diry[direction])
-  #if (direction == 0):
-  #  move_left()
-  #elif (direction == 1):
-  #  move_up()
-  #elif (direction == 2):
-  #  move_right()
-  #elif (direction == 3):
-  #  move_down()
 
 def go_backward():
   check_move(currentx-dirx[direction],currenty-diry[direction])
-  #if (direction == 0):
-  #  move_right()
-  #elif (direction == 1):
-  #  move_down()
-  #elif (direction == 2):
-  #  move_left()
-  #elif (direction == 3):
-  #  move_up()
-
-def move_left():
-  check_move(currentx-1,currenty)
-
-def move_right():
-  check_move(currentx+1,currenty)
-
-def move_up():
-  check_move(currentx,currenty-1)
-
-def move_down():
-  check_move(currentx,currenty+1)
 
 main()  
