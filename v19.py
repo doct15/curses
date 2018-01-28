@@ -102,40 +102,6 @@ map_3d_height=screenmax_y-gsize*7
 dirx=[-1,0,1,0]
 diry=[0,-1,0,1]
 
-#Define 3d hallway size
-
-#Define 3d hallway points
-xpoints=[i for i in range(12)]
-xpoints[0]=1
-xpoints[5]=int(map_3d_width/2)-int(int(map_3d_width/26)/2)
-hallway_length=xpoints[5]-xpoints[0]
-xpoints[1]=xpoints[0]+int(hallway_length*.3)
-xpoints[2]=xpoints[1]+int(hallway_length*.25)
-xpoints[3]=xpoints[2]+int(hallway_length*.2)
-xpoints[4]=xpoints[3]+int(hallway_length*.15)
-xpoints[11]=map_3d_width-xpoints[0]
-xpoints[10]=map_3d_width-xpoints[1]
-xpoints[9]=map_3d_width-xpoints[2]
-xpoints[8]=map_3d_width-xpoints[3]
-xpoints[7]=map_3d_width-xpoints[4]
-xpoints[6]=map_3d_width-xpoints[5]
-ypoints_top=[i for i in range(12)]
-ypoints_top[0]=1
-ypoints_top[5]=int(map_3d_height/2)-int(int(map_3d_height/18.4)/2)
-hallway_height=ypoints_top[5]-ypoints_top[0]
-ypoints_top[1]=ypoints_top[0]+int(hallway_height*.3)
-ypoints_top[2]=ypoints_top[1]+int(hallway_height*.25)
-ypoints_top[3]=ypoints_top[2]+int(hallway_height*.2)
-ypoints_top[4]=ypoints_top[3]+int(hallway_height*.15)
-ypoints_top[11]=ypoints_top[0]
-ypoints_top[10]=ypoints_top[1]
-ypoints_top[9]=ypoints_top[2]
-ypoints_top[8]=ypoints_top[3]
-ypoints_top[7]=ypoints_top[4]
-ypoints_top[6]=ypoints_top[5]
-ypoints_bottom=[i for i in range(12)]
-for i in range(12):
-  ypoints_bottom[i]=map_3d_height-ypoints_top[i]
 #Text configuration
 font_size = 18
 
@@ -153,19 +119,19 @@ for z in range(GRID_SIZE):
   ML = z * ADJX
   MR = map_3d_width - ML
   GAP = MR - ML
-  #LINEYB[z]=map_3d_height - z * 20
   LINEYT[z]=map_3d_y + z * ADJY + 2
   LINEYB[z]=map_3d_height - z * ADJY + map_3d_y - 2
   print ( "ML:", ML, " MR:", MR, " GAP:", GAP )
   for x in range(GRID_SIZE):
     LINEX[z][x] = map_3d_x + ML + GAP * ( x - (GRID_SIZE-2)/2 )
-    #LINEX[z][x] = map_3d_x + (ML - (z * (GRID_SIZE - 2)/2)-2) + (GAP + z + 10) * ( x - (GRID_SIZE-2)/2 )
+    LINEX[z][x] = map_3d_x + ML + (GAP + z) * ( x - (GRID_SIZE-2)/2 )
     print ( "Z:", z, " X:", x, " LINEX: ", LINEX[z][x], " LINEYB: ", LINEYB[z] )
   pygame.draw.line(screen,yellow,[LINEX[z][0],LINEYT[z]],[LINEX[z][GRID_SIZE - 1],LINEYT[z]],1)
   pygame.draw.line(screen,yellow,[LINEX[z][0],LINEYB[z]],[LINEX[z][GRID_SIZE - 1],LINEYB[z]],1)
 for x in range(GRID_SIZE):
   pygame.draw.line(screen,green,[LINEX[0][x],LINEYT[0]],[LINEX[GRID_SIZE - 1][x],LINEYT[GRID_SIZE - 1]],1)
   pygame.draw.line(screen,green,[LINEX[0][x],LINEYB[0]],[LINEX[GRID_SIZE - 1][x],LINEYB[GRID_SIZE - 1]],1)
+
 #Middle Line
 pygame.draw.line(screen,red,[map_3d_x + map_3d_width/2, map_3d_y],[map_3d_x + map_3d_width/2, map_3d_y + map_3d_height],1)
 
@@ -173,13 +139,8 @@ def main():
   clock = pygame.time.Clock()
   create_character()
   clear_screen()
-  draw_border(map_3d_x,map_3d_y,map_3d_width,map_3d_height,border_width)
+  draw_border(map_3d_x,map_3d_y,map_3d_width,map_3d_height  ,border_width)
   draw_border(map_placementx-1,map_placementy-1,gsize*(map_max_x)+2,gsize*(map_max_y)+2,border_width)
-  #for point in range(12):
-  #  pygame.draw.line(screen,yellow,[xpoints[point]+map_3d_x,ypoints_top[point]+map_3d_y],[xpoints[point]+map_3d_x,map_3d_y+map_3d_height-ypoints_top[point]],1)
-  #  if (point < 11):
-  #    pygame.draw.line(screen,yellow,[xpoints[point]+map_3d_x,ypoints_top[point]+map_3d_y],[xpoints[point+1]+map_3d_x,ypoints_top[point+1]+map_3d_y],1)
-  #    pygame.draw.line(screen,yellow,[xpoints[point]+map_3d_x,ypoints_bottom[point]+map_3d_y],[xpoints[point+1]+map_3d_x,ypoints_bottom[point+1]+map_3d_y],1)
   print_dngn(currentx,currenty)
   write_status("The dungeon")
   getinput()
