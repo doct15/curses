@@ -139,24 +139,26 @@ for i in range(12):
 #Text configuration
 font_size = 18
 
+#Define 3d grid
 #debug
 map_3d_width=100
+map_3d_x=220
 #eod
-
-ADJ = map_3d_width/12.5
-LINEX=[[z for z in range(5)] for x in range(5)]
-LINEY=[z for z in range(5)]
+GRID_SIZE = 6
+ADJX = map_3d_width/10
+LINEX=[[z for z in range(GRID_SIZE)] for x in range(GRID_SIZE)]
+LINEY=[z for z in range(GRID_SIZE)]
 print ( "Doing this" )
-for z in range(5):
-  ML = z * ADJ
+for z in range(GRID_SIZE):
+  ML = z * ADJX
   MR = map_3d_width - ML
   GAP = MR - ML
   LINEY[z]=map_3d_height - z * 20
   print ( "ML:", ML, " MR:", MR, " GAP:", GAP )
-  for x in range(5):
-    LINEX[z][x] = ML + GAP * ( x - 2 )
+  for x in range(GRID_SIZE):
+    LINEX[z][x] = map_3d_x + ML + GAP * ( x - 2 )
     print ( "Z:", z, " X:", x, " LINEX: ", LINEX[z][x] )
-  pygame.draw.line(screen,yellow,[LINEX[z][0],LINEY[z]],[LINEX[z][4],LINEY[z]],1)
+  pygame.draw.line(screen,yellow,[LINEX[z][0],LINEY[z]],[LINEX[z][GRID_SIZE - 1],LINEY[z]],1)
 
 
 
