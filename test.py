@@ -5,6 +5,12 @@ from os import system
 import curses
 import sys
 sys.path
+ADJY=10
+GRID_SIZE=6
+for z in range(GRID_SIZE):
+  y=z * (ADJY - z)
+  #print (z," * ",ADJY," - ",z," = ",y)
+  #print ("z",z,"y",y)
 
 stop
 

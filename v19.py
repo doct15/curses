@@ -119,13 +119,13 @@ for z in range(GRID_SIZE):
   ML = z * ADJX
   MR = map_3d_width - ML
   GAP = MR - ML
-  LINEYT[z]=map_3d_y + z * ADJY + 2
-  LINEYB[z]=map_3d_height - z * ADJY + map_3d_y - 2
-  print ( "ML:", ML, " MR:", MR, " GAP:", GAP )
+  LINEYT[z]=map_3d_y+2 + z * ADJY
+  LINEYB[z]=map_3d_height-3+map_3d_y - z * ADJY
+  #print ( "ML:", ML, " MR:", MR, " GAP:", GAP )
   for x in range(GRID_SIZE):
-    LINEX[z][x] = map_3d_x + ML + GAP * ( x - (GRID_SIZE-2)/2 )
-    LINEX[z][x] = map_3d_x + ML + (GAP + z) * ( x - (GRID_SIZE-2)/2 )
-    print ( "Z:", z, " X:", x, " LINEX: ", LINEX[z][x], " LINEYB: ", LINEYB[z] )
+    #LINEX[z][x] = map_3d_x + ML + GAP * ( x - (GRID_SIZE-2)/2 )
+    LINEX[z][x] = map_3d_x + ML + (GAP + z*2) * ( x - (GRID_SIZE-2)/2 ) - z*2 * ((GRID_SIZE-1)/2 - (GRID_SIZE-2)/2) 
+    print ( "ML,", ML, ",MR,", MR, ",GAP,", GAP, ",Z,", z, ",X,", x, ",LINEX,", LINEX[z][x], ",LINEYB,", LINEYB[z] )
   pygame.draw.line(screen,yellow,[LINEX[z][0],LINEYT[z]],[LINEX[z][GRID_SIZE - 1],LINEYT[z]],1)
   pygame.draw.line(screen,yellow,[LINEX[z][0],LINEYB[z]],[LINEX[z][GRID_SIZE - 1],LINEYB[z]],1)
 for x in range(GRID_SIZE):
