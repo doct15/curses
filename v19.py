@@ -2,11 +2,11 @@
 # -*- coding: latin-1 -*-
 
 #Global Stuff
-from os import system
+#from os import system
 import sys
-import curses
+#import curses
 import pygame
-from graphics import *
+#from graphics import *
 
 #How big in pixels are the walls/floor
 gsize=20
@@ -57,11 +57,12 @@ border_width = 2
 dude_color = green
 
 #Key bindings
-turn_left = pygame.K_a
-turn_right = pygame.K_d
-go_forward = pygame.K_w
-go_backward = pygame.K_s
-quit = pygame.K_q
+pturn_left = pygame.K_a
+pturn_right = pygame.K_d
+pgo_forward = pygame.K_w
+pgo_backward = pygame.K_s
+pquit = pygame.K_q
+pbreak = pygame.K_b
 
 #Debug/test dungeon map
 map = [
@@ -136,7 +137,7 @@ for x in range(GRID_SIZE):
 pygame.draw.line(screen,red,[map_3d_x + map_3d_width/2, map_3d_y],[map_3d_x + map_3d_width/2, map_3d_y + map_3d_height],1)
 
 def main():
-  clock = pygame.time.Clock()
+  #clock = pygame.time.Clock()
   create_character()
   clear_screen()
   draw_border(map_3d_x,map_3d_y,map_3d_width,map_3d_height  ,border_width)
@@ -207,19 +208,19 @@ def getinput():
   while True:
     for event in pygame.event.get():
       if event.type == pygame.KEYDOWN:
-        if event.key == quit:
+        if event.key == pquit:
           quit()
-        elif (event.key == turn_left) or (event.key == pygame.K_LEFT):
+        elif (event.key == pturn_left) or (event.key == pygame.K_LEFT):
           turn_left()
-        elif (event.key == go_forward) or (event.key == pygame.K_UP):
+        elif (event.key == pgo_forward) or (event.key == pygame.K_UP):
           go_forward()
-        elif (event.key == turn_right) or (event.key == pygame.K_RIGHT):
+        elif (event.key == pturn_right) or (event.key == pygame.K_RIGHT):
           turn_right()
-        elif (event.key == go_backward) or (event.key == pygame.K_DOWN):
+        elif (event.key == pgo_backward) or (event.key == pygame.K_DOWN):
           go_backward()
-        elif event.key == pygame.K_b:
-          return "b"
-          break
+        #elif event.key == pbreak:
+        #  return "b"
+        #  break
 
 def check_move(x,y):
   global currentx, currenty
@@ -260,5 +261,9 @@ def go_forward():
 
 def go_backward():
   check_move(currentx-dirx[direction],currenty-diry[direction])
+
+def quit():
+  pygame.quit()
+  sys.exit()
 
 main()  
